@@ -110,7 +110,98 @@
          If you don't need it, consider removing it and the corresponding copyField directive.
     -->
 
-    <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" />
+    <!-- VITRO:::::::::::::::::::::: Fields from original schema.xml -->
+    <!-- ****************************  Vitro Fields *************************** -->
+
+    <field name="DocId" type="string" indexed="true" stored="true" required="true" multiValued="false" omitNorms="true" /> 
+
+    <field name="type" type="string" indexed="true" stored="true" omitNorms="true" multiValued="true"/>
+
+    <field name="classgroup" type="string" indexed="true" stored="true" multiValued="true"/>
+
+    <field name="mostSpecificTypeURIs" type="string" indexed="true" stored="true" omitNorms="true" multiValued="true"/>
+
+    <field name="PROHIBITED_FROM_TEXT_RESULTS" type="string" indexed="true" stored="false" omitNorms="true" multiValued="true"/>
+    <field name="URI" type="string" indexed="true" stored="true" multiValued="false" omitNorms="true"/>
+
+    <field name="nameRaw" type="string" indexed="true" stored="true" multiValued="true" omitNorms="false"/>
+
+    <!--  nameText added for NIHVIVO-3701 -->
+    <field name="nameText" type="text" indexed="true" stored="false" multiValued="true"/>
+
+    <field name="nameLowercase" type="lowercase" indexed="true" stored="false" multiValued="true" omitNorms="false"/>
+    <!-- A sortable version of nameLowercase -->
+    <field name="nameLowercaseSingleValued" type="lowercase" indexed="true" stored="false" multiValued="false" omitNorms="true" />  
+    <field name="nameUnstemmed" type="text_unstemmed" indexed="true" stored="false" multiValued="true" omitNorms="false"/>
+    <field name="nameStemmed" type="text_stemmed" indexed="true" stored="false" multiValued="true" omitNorms="false"/>  
+
+    <!-- Autocomplete search fields -->
+    <field name="acNameUntokenized" type="edgengram_untokenized" indexed="true" stored="false" multiValued="true" />
+    <field name="acNameStemmed" type="edgengram_stemmed" indexed="true" stored="false" multiValued="true" />
+
+    <field name="indexedTime" type="long" indexed="true" stored="true"/>
+    <field name="NAME_PHONETIC" type ="phonetic" indexed="true" stored="false" multiValued="true"/>
+
+    <field name="ALLTEXT" type="text" indexed="true" stored="true" multiValued="true"/>
+    <field name="ALLTEXTUNSTEMMED" type="textgen" indexed="true" stored="false" multiValued="true"/>
+
+    <field name="THUMBNAIL" type="string" indexed="true" stored="true"/>
+
+    <field name="BETA" type="float" indexed="true" stored="true" multiValued="false"/>
+
+    <!-- field for storing locations of thumbnails -->
+    <field name="THUMBNAIL_URL" type="string" indexed="false" stored="true"/>
+
+    <!-- field for source institution's url -->
+    <field name="siteURL" type="string" indexed="true" stored="true"/>
+
+    <!--  field for source institution's name -->
+    <field name="siteName" type="string" indexed="true" stored="true"/>
+
+    <!--  field for preferred title -->
+    <field name="PREFERRED_TITLE" type="string" indexed="true" stored="true" multiValued="true"/>
+
+    <!-- Copy nameRaw into several other fields -->  
+    <copyField source="nameRaw" dest="nameStemmed" />
+    <copyField source="nameRaw" dest="nameUnstemmed" />
+    <copyField source="nameRaw" dest="nameLowercase" />
+    <copyField source="nameRaw" dest="NAME_PHONETIC" />
+    <copyField source="nameRaw" dest="acNameUntokenized" />
+    <copyField source="nameRaw" dest="acNameStemmed" /> 
+    <copyField source="nameRaw" dest="nameText" />
+    <!--  nameLowercaseSingleValued is not copied from nameRaw becasue nameRaw might have multiple values -->
+
+    <!-- field for hash signature, used for comparing to versions from external caches -->
+    <field name="etag" type="string" stored="true" indexed="false" multiValued="false" />
+
+    <!-- ****************************  End Vitro Fields *************************** -->
+
+    <!-- ****************************  Dynamic Fields *************************** -->
+    <dynamicField name="*_string" type="string" indexed="true" stored="true" multiValued="true"/>
+    <dynamicField name="*_text" type="text" indexed="true" stored="true" multiValued="true"/>
+    <dynamicField name="*_tdate" type="tdate" indexed="true" stored="true" multiValued="true"/>
+    <dynamicField name="*_tint" type="tint" indexed="true" stored="true" multiValued="true"/>
+
+    <dynamicField name="*_label_sort"  type="string"  indexed="true"  stored="true" />
+    <dynamicField name="*_label_display"  type="string"  indexed="true"  stored="true" />
+
+    <dynamicField name="*_coordinate"  type="tdouble" indexed="true"  stored="false" />
+
+    <!-- some trie-coded dynamic fields for faster range queries -->
+    <dynamicField name="*_ti" type="tint"    indexed="true"  stored="true"/>
+    <dynamicField name="*_tl" type="tlong"   indexed="true"  stored="true"/>
+    <dynamicField name="*_tf" type="tfloat"  indexed="true"  stored="true"/>
+    <dynamicField name="*_td" type="tdouble" indexed="true"  stored="true"/>
+    <dynamicField name="*_tdt" type="tdate"  indexed="true"  stored="true"/>
+
+    <dynamicField name="*_c"   type="currency" indexed="true"  stored="true"/>
+
+    <!-- ****************************  End Dynamic Fields *************************** -->
+
+    <field name="timestamp" type="date" indexed="true" stored="true" default="NOW" multiValued="false"/> 
+    <!-- VITRO:::::::::::::::::::::: Fields from original schema.xml -->
+
+    <!-- <field name="id" type="string" indexed="true" stored="true" required="true" multiValued="false" /> -->
     <!-- docValues are enabled by default for long type so we don't need to index the version field  -->
     <field name="_version_" type="plong" indexed="false" stored="false"/>
 
@@ -120,7 +211,7 @@
     <!-- for nested documents (relationship tracking) -->
     <field name="_nest_path_" type="_nest_path_" /><fieldType name="_nest_path_" class="solr.NestPathField" />
 
-    <field name="_text_" type="text_general" indexed="true" stored="false" multiValued="true"/>
+    <!-- <field name="_text_" type="text_general" indexed="true" stored="false" multiValued="true"/> -->
 
     <!-- This can be enabled, in case the client does not know what fields may be searched. It isn't enabled by default
          because it's very expensive to index everything twice. -->
@@ -168,7 +259,8 @@
     <!-- Field to use to determine and enforce document uniqueness.
       Unless this field is marked with required="false", it will be a required field
     -->
-    <uniqueKey>id</uniqueKey>
+    <!-- <uniqueKey>id</uniqueKey> -->
+    <uniqueKey>DocId</uniqueKey>
 
     <!-- copyField commands copy one field to another at the time a document
        is added to the index.  It's used either to index the same field differently,
@@ -540,6 +632,19 @@
     -->
     <fieldType name="location_rpt" class="solr.SpatialRecursivePrefixTreeFieldType"
                geo="true" distErrPct="0.025" maxDistErr="0.001" distanceUnits="kilometers" />
+
+    <!-- Money/currency field type. See http://wiki.apache.org/solr/MoneyFieldType
+         Parameters:
+           defaultCurrency: Specifies the default currency if none specified. Defaults to "USD"
+           precisionStep:   Specifies the precisionStep for the TrieLong field used for the amount
+           providerClass:   Lets you plug in other exchange provider backend:
+                            solr.FileExchangeRateProvider is the default and takes one parameter:
+                              currencyConfig: name of an xml file holding exchange rates
+                            solr.OpenExchangeRatesOrgProvider uses rates from openexchangerates.org:
+                              ratesFileLocation: URL or path to rates JSON file (default latest.json on the web)
+                              refreshInterval: Number of minutes between each rates fetch (default: 1440, min: 60)
+    -->
+    <fieldType name="currency" class="solr.CurrencyField" precisionStep="8" defaultCurrency="USD" currencyConfig="currency.xml" />
 
     <!-- Payloaded field types -->
     <fieldType name="delimited_payloads_float" stored="false" indexed="true" class="solr.TextField">
