@@ -1,17 +1,17 @@
-FROM solr:7.7.3-slim
+FROM solr:9.2
 
-RUN chmod -R ugo+w /opt/solr/server/solr/
-RUN chmod -R ugo+w /opt/solr/server/logs/
-
-COPY /vivocore/conf /opt/solr/server/solr/configsets/vivocore/conf
-
-COPY setup.sh /setup.sh
+ARG CONFIGSET vivocore
+ENV CONFIGSET $CONFIGSET
 
 USER root
 
-RUN chown -R solr:solr /opt/solr/server/solr/configsets/vivocore
-RUN chmod -R 755 /opt/solr/server/solr/configsets/vivocore
+COPY configsets/$CONFIGSET/conf /opt/solr/server/solr/configsets/$CONFIGSET/conf
+COPY setup.sh /opt/solr/docker/scripts/setup.sh
+
+RUN chown -R solr:solr /opt/solr/server/solr/configsets/$CONFIGSET
+RUN chmod -R 755 /opt/solr/server/solr/configsets/$CONFIGSET
+RUN chmod -R ugo+rx /opt/solr/docker/scripts/setup.sh
 
 USER solr
 
-CMD ["/bin/bash", "/setup.sh"]
+CMD ["/bin/bash", "/opt/solr/docker/scripts/setup.sh"]
