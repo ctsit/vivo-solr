@@ -5,6 +5,7 @@ ENV CONFIGSET $CONFIGSET
 
 USER root
 
+COPY modules/velocity /opt/solr/modules/velocity
 COPY configsets/$CONFIGSET/conf /opt/solr/server/solr/configsets/$CONFIGSET/conf
 COPY setup.sh /opt/solr/docker/scripts/setup.sh
 
