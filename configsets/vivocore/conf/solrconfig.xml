@@ -255,6 +255,7 @@
          IndexWriter to write its debugging info the specified file
       -->
     <!-- <infoStream file="INFOSTREAM.txt">false</infoStream> -->
+    <infoStream>true</infoStream>
   </indexConfig>
 
   <!-- The default high-performance update handler -->
