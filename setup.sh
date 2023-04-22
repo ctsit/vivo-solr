@@ -9,7 +9,7 @@ fi
 
 # allow easier reset core with `docker run -e RESET_CORE=true`
 if [[ "$RESET_CORE" = "true" ]]; then
-  echo 'Removing core /var/solr/data/$CONFIGSET'
+  echo "Removing core /var/solr/data/$CONFIGSET"
   rm -rf /var/solr/data/$CONFIGSET
 fi
 
