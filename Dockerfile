@@ -1,6 +1,6 @@
 FROM solr:9.2
 
-ARG CONFIGSET vivocore
+ARG CONFIGSET=vivocore
 ENV CONFIGSET $CONFIGSET
 
 USER root
